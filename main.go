@@ -1,23 +1,14 @@
 package main
 
 import (
-	"context"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
 	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/bson"
 
 	"github.com/albertofp/rinha-de-backend/database"
+	"github.com/albertofp/rinha-de-backend/handlers"
 )
-
-type Person struct {
-	ID        uuid.UUID
-	Nickname  string
-	Name      string
-	Birthdate string
-	Stack     []string
-}
 
 func main() {
 	err := initApp()
@@ -33,18 +24,10 @@ func main() {
 		return c.SendString("GET /pessoas")
 	})
 
-	app.Post("/pessoas", func(c *fiber.Ctx) error {
-		testDoc := bson.M{"name": "testDoc"}
-		collection := database.GetCollection("pessoas")
-		newDoc, err := collection.InsertOne(context.TODO(), testDoc)
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).SendString("Error inserting doc")
-		}
+	app.Post("/pessoas", handlers.TestHandler)
 
-		return c.JSON(newDoc)
-	})
-
-	app.Listen(":8080")
+	port := os.Getenv("PORT")
+	app.Listen(":" + port)
 }
 
 func initApp() error {
