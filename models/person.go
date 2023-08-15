@@ -1,11 +1,8 @@
 package models
 
-import "github.com/google/uuid"
-
 type Person struct {
-	ID        uuid.UUID `json:"id" bson:"_id"`
-	Nickname  string    `json:"nickname" bson:"nickname"`
-	Name      string    `json:"name" bson:"nickname"`
-	Birthdate string    `json:"birthdate" bson:"birthdate"`
-	Stack     []string  `json:"stack" bson:"stack"`
+	Nickname  string   `json:"nickname" bson:"nickname" validate:"required,max=32"`
+	Name      string   `json:"name" bson:"nickname" validate:"required,max=100"`
+	Birthdate string   `json:"birthdate" bson:"birthdate" validate:"required,2023-08-15"`
+	Stack     []string `json:"stack" bson:"stack" validate:"dive,max=32"`
 }
