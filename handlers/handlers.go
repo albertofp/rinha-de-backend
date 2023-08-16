@@ -7,10 +7,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 
 	"github.com/albertofp/rinha-de-backend/database"
-	"github.com/albertofp/rinha-de-backend/models"
 )
 
-func PostPerson(c *fiber.Ctx, person models.Person) error {
+func PostPerson(c *fiber.Ctx) error {
 	return nil
 }
 
