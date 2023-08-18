@@ -24,6 +24,8 @@ func main() {
 		return c.SendString("GET /pessoas")
 	})
 
+	app.Get("/contagem-pessoas", handlers.CountPeople)
+
 	app.Post("/pessoas", handlers.TestHandler)
 
 	port := os.Getenv("PORT")
