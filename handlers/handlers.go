@@ -2,25 +2,19 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/albertofp/rinha-de-backend/database"
 	"github.com/albertofp/rinha-de-backend/models"
 	"github.com/albertofp/rinha-de-backend/validation"
 )
 
-func Healthcheck(c *fiber.Ctx) error {
-	return c.SendString("GET Success")
-}
-
-func SearchPerson(c *fiber.Ctx) error {
+func GetPersonByTerm(c *fiber.Ctx) error {
 	t := c.Params("t")
 	fmt.Printf("t = %s\n", t)
 	if t == "" {
@@ -29,13 +23,9 @@ func SearchPerson(c *fiber.Ctx) error {
 		})
 	}
 	coll := database.GetCollection("pessoas")
-	model := mongo.IndexModel{Keys: bson.D{{"description", "text"}}}
-	name, err := coll.Indexes().CreateOne(context.TODO(), model)
-	if err != nil {
-		panic(err)
-	}
-	filter := bson.D{{"$text", bson.D{{"$search", t}}}}
-	fmt.Println("Name of index created: " + name)
+	filter := bson.M{primitive.E{Keys: {
+		"nome", "apelido", "stack",
+	}}}
 
 	cursor, err := coll.Find(context.TODO(), filter)
 	if err != nil {
@@ -46,8 +36,7 @@ func SearchPerson(c *fiber.Ctx) error {
 		panic(err)
 	}
 	for _, result := range results {
-		res, _ := json.Marshal(result)
-		fmt.Println(string(res))
+		cursor.Decode(&result)
 	}
 
 	return c.Status(fiber.StatusOK).JSON(results)
@@ -77,18 +66,27 @@ func PostPerson(c *fiber.Ctx) error {
 
 func GetPersonById(c *fiber.Ctx) error {
 	id := c.Params("id")
+	if id == "" {
+		return c.Status(400).JSON(fiber.Map{
+			"error": "id is required",
+		})
+	}
 	fmt.Printf("id: %s", id)
 	coll := database.GetCollection("pessoas")
 	filter := bson.D{primitive.E{Key: "id", Value: id}}
-	cursor, err := coll.Find(context.TODO(), filter)
+
+	pessoa := models.PersonDTO{}
+	err := coll.FindOne(context.TODO(), filter).Decode(&pessoa)
 	if err != nil {
-		panic(err)
+		return c.Status(500).JSON(fiber.Map{
+			"error": err.Error(),
+		})
 	}
-	res, _ := json.Marshal(cursor)
-	return c.Status(fiber.StatusFound).JSON(res)
+
+	return c.Status(fiber.StatusFound).JSON(pessoa)
 }
 
-func GetAllPerson(c *fiber.Ctx) error {
+func GetAll(c *fiber.Ctx) error {
 	filter := bson.M{}
 	coll := database.GetCollection("pessoas")
 
@@ -104,7 +102,7 @@ func GetAllPerson(c *fiber.Ctx) error {
 
 }
 
-func CountPeople(c *fiber.Ctx) error {
+func Count(c *fiber.Ctx) error {
 	coll := database.GetCollection("pessoas")
 	filter := bson.D{}
 	count, err := coll.CountDocuments(context.TODO(), filter)
@@ -115,4 +113,8 @@ func CountPeople(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 		"count": count,
 	})
+}
+
+func Status(c *fiber.Ctx) error {
+	return c.SendString("GET Success")
 }

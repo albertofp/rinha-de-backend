@@ -5,6 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/joho/godotenv"
 
 	"github.com/albertofp/rinha-de-backend/database"
@@ -21,14 +22,17 @@ func main() {
 
 	app := fiber.New()
 	app.Use(logger.New())
+	app.Use(requestid.New())
 
-	//app.Get("/pessoas/:t?", handlers.SearchPerson)
-	app.Get("/contagem-pessoas", handlers.CountPeople)
-	app.Get("/pessoas/{id}", handlers.GetPersonById)
-	app.Post("/pessoas", handlers.PostPerson)
+	p := app.Group("/pessoas")
 
-	app.Get("/getall", handlers.GetAllPerson)
-	app.Get("/status", handlers.Healthcheck)
+	p.Get(":t", handlers.GetPersonByTerm)
+	p.Get("/:id", handlers.GetPersonById)
+	p.Post("/", handlers.PostPerson)
+
+	app.Get("/contagem-pessoas", handlers.Count)
+	app.Get("/getall", handlers.GetAll)
+	app.Get("/status", handlers.Status)
 
 	port := os.Getenv("PORT")
 	app.Listen(":" + port)
