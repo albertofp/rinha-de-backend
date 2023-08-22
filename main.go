@@ -21,12 +21,10 @@ func main() {
 	app := fiber.New()
 
 	app.Get("/contagem-pessoas", handlers.CountPeople)
-	app.Get("/healthcheck", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World 👋!")
-	})
+	app.Get("/healthcheck", handlers.Healthcheck)
 	//app.Get("/pessoas", handlers.SearchPerson)
 	//app.Get("pessoas/:id", handlers.GetPersonById)
-	//app.Post("/pessoas", handlers.PostPerson)
+	app.Post("/pessoas", handlers.PostPerson)
 
 	port := os.Getenv("PORT")
 	app.Listen(":" + port)
