@@ -23,10 +23,7 @@ func GetPersonByTerm(c *fiber.Ctx) error {
 		})
 	}
 	coll := database.GetCollection("pessoas")
-	filter := bson.M{primitive.E{Keys: {
-		"nome", "apelido", "stack",
-	}}}
-
+	filter := bson.D{}
 	cursor, err := coll.Find(context.TODO(), filter)
 	if err != nil {
 		panic(err)
