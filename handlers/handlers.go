@@ -2,19 +2,54 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/albertofp/rinha-de-backend/database"
 	"github.com/albertofp/rinha-de-backend/models"
+	"github.com/albertofp/rinha-de-backend/validation"
 )
 
 func Healthcheck(c *fiber.Ctx) error {
 	return c.SendString("GET Success")
+}
+
+func SearchPerson(c *fiber.Ctx) error {
+	t := c.Params("t")
+	fmt.Printf("t = %s\n", t)
+	if t == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "400 - Bad request: query must not be empty",
+		})
+	}
+	coll := database.GetCollection("pessoas")
+	model := mongo.IndexModel{Keys: bson.D{{"description", "text"}}}
+	name, err := coll.Indexes().CreateOne(context.TODO(), model)
+	if err != nil {
+		panic(err)
+	}
+	filter := bson.D{{"$text", bson.D{{"$search", "js"}}}}
+	fmt.Println("Name of index created: " + name)
+
+	cursor, err := coll.Find(context.TODO(), filter)
+	if err != nil {
+		panic(err)
+	}
+	var results []models.PersonDTO
+	if err = cursor.All(context.TODO(), &results); err != nil {
+		panic(err)
+	}
+	for _, result := range results {
+		res, _ := json.Marshal(result)
+		fmt.Println(string(res))
+	}
+
+	return c.Status(fiber.StatusOK).JSON(results)
 }
 
 func PostPerson(c *fiber.Ctx) error {
@@ -24,17 +59,19 @@ func PostPerson(c *fiber.Ctx) error {
 	}
 	newPerson.Id = uuid.New()
 	coll := database.GetCollection("pessoas")
-	nDoc, err := coll.InsertOne(context.TODO(), newPerson)
+	_, err := coll.InsertOne(context.TODO(), newPerson)
 	if err != nil {
 		return err
 	}
 
-	statusCode, msg := validateRequest(newPerson)
+	statusCode, msg := validation.ValidateRequest(newPerson)
 	if statusCode != fiber.StatusCreated {
 		return c.Status(statusCode).JSON(fiber.Map{"error": msg})
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"success": msg, "id": nDoc.InsertedID})
+	header := fmt.Sprintf("/pessoas/%s", newPerson.Id)
+	c.Set("Location", header)
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"success": msg, "id": newPerson.Id})
 }
 
 func GetAllPerson(c *fiber.Ctx) error {
@@ -66,59 +103,14 @@ func CountPeople(c *fiber.Ctx) error {
 	})
 }
 
-func GetPersonById(c *fiber.Ctx, id string) error {
-
-	return nil
-}
-
-func validateRequest(req *models.PersonDTO) (int, string) {
-
-	msgUnprocessable := "422 - Unprocessable entity"
-	msgBadRequest := "401 - Bad request"
-	msgCreated := "201 - Created"
-
-	if len(req.Apelido) > 32 || len(req.Nome) > 100 {
-		return fiber.StatusUnprocessableEntity, msgUnprocessable
+func GetPersonById(c *fiber.Ctx) error {
+	id := c.Params("id")
+	coll := database.GetCollection("pessoas")
+	filter := bson.D{{"id", id}}
+	cursor, err := coll.Find(context.TODO(), filter)
+	if err != nil {
+		panic(err)
 	}
-
-	if !validateDate(req) {
-		return fiber.StatusUnprocessableEntity, msgUnprocessable
-	}
-
-	if !isString(req.Apelido) || !isString(req.Nome) {
-		return fiber.StatusBadRequest, msgBadRequest
-	}
-
-	if req.Apelido == "" || req.Nome == "" {
-		return fiber.StatusUnprocessableEntity, msgUnprocessable
-	}
-
-	if req.Stack != nil {
-		for i := range req.Stack {
-			if len(req.Stack[i]) > 32 || !isString(req.Stack[i]) {
-				fmt.Println("stack not string")
-				return fiber.StatusUnprocessableEntity, msgUnprocessable
-			}
-		}
-
-	}
-	if !validateDate(req) {
-		return fiber.StatusUnprocessableEntity, msgUnprocessable
-	}
-
-	return fiber.StatusCreated, msgCreated
-}
-
-func validateDate(req *models.PersonDTO) bool {
-	dateLayout := "2002-12-17"
-	if _, err := time.Parse(dateLayout, req.Nascimento); err != nil {
-		return true
-	}
-	return false
-}
-func isString[T any](input T) bool {
-	var check interface{}
-	check = input
-	_, ok := check.(string)
-	return ok
+	res, _ := json.Marshal(cursor)
+	return c.Status(fiber.StatusFound).JSON(res)
 }

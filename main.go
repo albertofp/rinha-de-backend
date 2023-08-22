@@ -20,12 +20,13 @@ func main() {
 
 	app := fiber.New()
 
-	app.Get("/pessoas?t=[:query]", handlers.PostPerson)
+	app.Get("/pessoas:t?", handlers.SearchPerson)
 	app.Get("/contagem-pessoas", handlers.CountPeople)
 	app.Get("/healthcheck", handlers.Healthcheck)
-	app.Get("/getall", handlers.GetAllPerson)
-	//app.Get("pessoas/:id", handlers.GetPersonById)
+	app.Get("pessoas/{id}", handlers.GetPersonById)
 	app.Post("/pessoas", handlers.PostPerson)
+
+	app.Get("/getall", handlers.GetAllPerson)
 
 	port := os.Getenv("PORT")
 	app.Listen(":" + port)
