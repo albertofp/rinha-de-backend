@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/joho/godotenv"
 
 	"github.com/albertofp/rinha-de-backend/database"
@@ -19,14 +20,15 @@ func main() {
 	defer database.CloseDB()
 
 	app := fiber.New()
+	app.Use(logger.New())
 
-	app.Get("/pessoas:t?", handlers.SearchPerson)
+	//app.Get("/pessoas/:t?", handlers.SearchPerson)
 	app.Get("/contagem-pessoas", handlers.CountPeople)
-	app.Get("/healthcheck", handlers.Healthcheck)
-	app.Get("pessoas/{id}", handlers.GetPersonById)
+	app.Get("/pessoas/{id}", handlers.GetPersonById)
 	app.Post("/pessoas", handlers.PostPerson)
 
 	app.Get("/getall", handlers.GetAllPerson)
+	app.Get("/status", handlers.Healthcheck)
 
 	port := os.Getenv("PORT")
 	app.Listen(":" + port)

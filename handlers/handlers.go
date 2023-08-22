@@ -8,6 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/albertofp/rinha-de-backend/database"
@@ -33,7 +34,7 @@ func SearchPerson(c *fiber.Ctx) error {
 	if err != nil {
 		panic(err)
 	}
-	filter := bson.D{{"$text", bson.D{{"$search", "js"}}}}
+	filter := bson.D{{"$text", bson.D{{"$search", t}}}}
 	fmt.Println("Name of index created: " + name)
 
 	cursor, err := coll.Find(context.TODO(), filter)
@@ -74,6 +75,19 @@ func PostPerson(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"success": msg, "id": newPerson.Id})
 }
 
+func GetPersonById(c *fiber.Ctx) error {
+	id := c.Params("id")
+	fmt.Printf("id: %s", id)
+	coll := database.GetCollection("pessoas")
+	filter := bson.D{primitive.E{Key: "id", Value: id}}
+	cursor, err := coll.Find(context.TODO(), filter)
+	if err != nil {
+		panic(err)
+	}
+	res, _ := json.Marshal(cursor)
+	return c.Status(fiber.StatusFound).JSON(res)
+}
+
 func GetAllPerson(c *fiber.Ctx) error {
 	filter := bson.M{}
 	coll := database.GetCollection("pessoas")
@@ -101,16 +115,4 @@ func CountPeople(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 		"count": count,
 	})
-}
-
-func GetPersonById(c *fiber.Ctx) error {
-	id := c.Params("id")
-	coll := database.GetCollection("pessoas")
-	filter := bson.D{{"id", id}}
-	cursor, err := coll.Find(context.TODO(), filter)
-	if err != nil {
-		panic(err)
-	}
-	res, _ := json.Marshal(cursor)
-	return c.Status(fiber.StatusFound).JSON(res)
 }
