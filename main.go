@@ -22,7 +22,7 @@ func main() {
 
 	app.Get("/contagem-pessoas", handlers.CountPeople)
 	app.Get("/healthcheck", handlers.Healthcheck)
-	//app.Get("/pessoas", handlers.SearchPerson)
+	app.Get("/getall", handlers.GetAllPerson)
 	//app.Get("pessoas/:id", handlers.GetPersonById)
 	app.Post("/pessoas", handlers.PostPerson)
 

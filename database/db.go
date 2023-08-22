@@ -8,6 +8,8 @@ import (
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+
+	"github.com/albertofp/rinha-de-backend/lib"
 )
 
 var db *mongo.Database
@@ -19,8 +21,8 @@ func InitDB() error {
 			"You must set your 'MONGODB_URI' environment variable. See\n\t https://www.mongodb.com/docs/drivers/go/current/usage-examples/#environment-variable",
 		)
 	}
-
-	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(uri))
+	mongoOptions := options.Client().ApplyURI(uri).SetRegistry(lib.MongoRegistry)
+	client, err := mongo.Connect(context.Background(), mongoOptions)
 	if err != nil {
 		panic(err)
 	}
