@@ -20,6 +20,7 @@ func main() {
 
 	app := fiber.New()
 
+	app.Get("/pessoas?t=[:query]", handlers.PostPerson)
 	app.Get("/contagem-pessoas", handlers.CountPeople)
 	app.Get("/healthcheck", handlers.Healthcheck)
 	app.Get("/getall", handlers.GetAllPerson)

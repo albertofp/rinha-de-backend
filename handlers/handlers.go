@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 
 	"github.com/albertofp/rinha-de-backend/database"
@@ -21,7 +22,7 @@ func PostPerson(c *fiber.Ctx) error {
 	if err := c.BodyParser(newPerson); err != nil {
 		return err
 	}
-
+	newPerson.Id = uuid.New()
 	coll := database.GetCollection("pessoas")
 	nDoc, err := coll.InsertOne(context.TODO(), newPerson)
 	if err != nil {
@@ -35,6 +36,7 @@ func PostPerson(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"success": msg, "id": nDoc.InsertedID})
 }
+
 func GetAllPerson(c *fiber.Ctx) error {
 	filter := bson.M{}
 	coll := database.GetCollection("pessoas")
