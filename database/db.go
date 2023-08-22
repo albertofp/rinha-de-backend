@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 
@@ -12,9 +13,11 @@ import (
 var db *mongo.Database
 
 func InitDB() error {
-	uri := os.Getenv("MONGO_URL")
+	uri := os.Getenv("MONGO_RAILWAY")
 	if uri == "" {
-		log.Fatal("You must set your 'MONGODB_URI' environment variable. See\n\t https://www.mongodb.com/docs/drivers/go/current/usage-examples/#environment-variable")
+		log.Fatal(
+			"You must set your 'MONGODB_URI' environment variable. See\n\t https://www.mongodb.com/docs/drivers/go/current/usage-examples/#environment-variable",
+		)
 	}
 
 	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(uri))
@@ -23,7 +26,7 @@ func InitDB() error {
 	}
 
 	db = client.Database("rinhadb")
-
+	fmt.Printf("Connected to Database at %s", uri)
 	return nil
 }
 
