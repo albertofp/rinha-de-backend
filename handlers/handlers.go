@@ -16,7 +16,6 @@ import (
 
 func GetPersonByTerm(c *fiber.Ctx) error {
 	t := c.Params("t")
-	fmt.Printf("t = %s\n", t)
 	if t == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "400 - Bad request: query must not be empty",
