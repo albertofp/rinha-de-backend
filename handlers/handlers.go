@@ -14,25 +14,39 @@ import (
 	"github.com/albertofp/rinha-de-backend/validation"
 )
 
+type QueryParams struct {
+	Term string `query:"t"`
+}
+
 func GetPersonByTerm(c *fiber.Ctx) error {
-	t := c.Params("t")
-	if t == "" {
+	t := new(QueryParams)
+	if err := c.QueryParser(&t); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": err,
+		})
+	}
+
+	if t.Term == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "400 - Bad request: query must not be empty",
 		})
 	}
 	coll := database.GetCollection("pessoas")
-	filter := bson.D{}
+	filter := bson.M{
+		"$or": []bson.M{
+			{"apelido": t.Term},
+			{"nome": t.Term},
+			{"nascimento": t.Term},
+			{"stack": t.Term},
+		},
+	}
 	cursor, err := coll.Find(context.TODO(), filter)
 	if err != nil {
-		panic(err)
+		return err
 	}
-	var results []models.PersonDTO
+	var results []*models.PersonDTO
 	if err = cursor.All(context.TODO(), &results); err != nil {
-		panic(err)
-	}
-	for _, result := range results {
-		cursor.Decode(&result)
+		return err
 	}
 
 	return c.Status(fiber.StatusOK).JSON(results)

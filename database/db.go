@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
 var db *mongo.Database
@@ -21,6 +22,11 @@ func InitDB() error {
 	client, err := mongo.Connect(context.Background())
 	if err != nil {
 		panic(err)
+	}
+
+	err = client.Ping(context.TODO(), readpref.Primary())
+	if err != nil {
+		log.Fatal("Error connecting to db: ", err)
 	}
 
 	db = client.Database("rinhadb")
