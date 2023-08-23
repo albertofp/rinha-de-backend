@@ -24,11 +24,9 @@ func main() {
 	app.Use(logger.New())
 	app.Use(requestid.New())
 
-	p := app.Group("/pessoas")
-
 	app.Get("/pessoas", handlers.GetPersonByTerm)
-	p.Get("/:id", handlers.GetPersonById)
-	p.Post("/", handlers.PostPerson)
+	app.Get("/pessoas/id", handlers.GetPersonById)
+	app.Post("/pessoas", handlers.PostPerson)
 
 	app.Get("/contagem-pessoas", handlers.Count)
 	app.Get("/getall", handlers.GetAll)
