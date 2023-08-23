@@ -25,7 +25,7 @@ func main() {
 	app.Use(requestid.New())
 
 	app.Get("/pessoas", handlers.GetPersonByTerm)
-	app.Get("/pessoas/id", handlers.GetPersonById)
+	app.Get("/pessoas/:id", handlers.GetPersonById)
 	app.Post("/pessoas", handlers.PostPerson)
 
 	app.Get("/contagem-pessoas", handlers.Count)

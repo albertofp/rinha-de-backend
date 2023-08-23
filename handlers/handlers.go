@@ -7,7 +7,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/albertofp/rinha-de-backend/database"
 	"github.com/albertofp/rinha-de-backend/models"
@@ -15,7 +14,7 @@ import (
 )
 
 type QueryParams struct {
-	T string `query:"t"`
+	T string //`query:"t"`
 }
 
 func GetPersonByTerm(c *fiber.Ctx) error {
@@ -81,18 +80,20 @@ func PostPerson(c *fiber.Ctx) error {
 
 func GetPersonById(c *fiber.Ctx) error {
 	id := c.Params("id")
+	fmt.Println("Search by id: ", id)
 	if id == "" {
 		return c.Status(400).JSON(fiber.Map{
 			"error": "id is required",
 		})
 	}
-	fmt.Printf("id: %s", id)
 	coll := database.GetCollection("pessoas")
-	filter := bson.D{primitive.E{Key: "id", Value: id}}
+	//filter := bson.D{primitive.E{Key: "id", Value: id}}
+	filter := bson.M{"id": id}
 
-	pessoa := models.PersonDTO{}
+	var pessoa models.PersonDTO
 	err := coll.FindOne(context.TODO(), filter).Decode(&pessoa)
 	if err != nil {
+		fmt.Println("searching...")
 		return c.Status(500).JSON(fiber.Map{
 			"error": err.Error(),
 		})
