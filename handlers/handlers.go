@@ -51,6 +51,10 @@ func GetPersonByTerm(c *fiber.Ctx) error {
 	}
 
 	fmt.Println("results: ", &results)
+	if results == nil {
+		emptyArr := make([]models.PersonDTO, 0)
+		return c.Status(fiber.StatusOK).JSON(emptyArr)
+	}
 
 	return c.Status(fiber.StatusOK).JSON(results)
 }
