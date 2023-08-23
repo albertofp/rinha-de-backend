@@ -26,7 +26,7 @@ func main() {
 
 	p := app.Group("/pessoas")
 
-	p.Get("/", handlers.GetPersonByTerm)
+	app.Get("/pessoas", handlers.GetPersonByTerm)
 	p.Get("/:id", handlers.GetPersonById)
 	p.Post("/", handlers.PostPerson)
 

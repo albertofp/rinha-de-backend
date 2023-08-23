@@ -19,7 +19,7 @@ type QueryParams struct {
 }
 
 func GetPersonByTerm(c *fiber.Ctx) error {
-	t := new(QueryParams)
+	var t QueryParams
 	if err := c.QueryParser(&t); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": err,
