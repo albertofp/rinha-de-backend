@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/albertofp/rinha-de-backend/database"
 	"github.com/albertofp/rinha-de-backend/models"
@@ -40,8 +41,9 @@ func GetPersonByTerm(c *fiber.Ctx) error {
 			{"stack": t.T},
 		},
 	}
+	opts := options.Find().SetLimit(50)
 
-	cursor, err := coll.Find(context.TODO(), filter)
+	cursor, err := coll.Find(context.TODO(), filter, opts)
 	if err != nil {
 		return err
 	}
