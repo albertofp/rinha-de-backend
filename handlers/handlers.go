@@ -26,8 +26,6 @@ func GetPersonByTerm(c *fiber.Ctx) error {
 		})
 	}
 
-	fmt.Println("t.T: ", t.T)
-
 	if t.T == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "400 - Bad request: query must not be empty",
@@ -67,21 +65,23 @@ func PostPerson(c *fiber.Ctx) error {
 	if err := c.BodyParser(newPerson); err != nil {
 		return err
 	}
-	newPerson.Id = uuid.New().String()
-	coll := database.GetCollection("pessoas")
-	_, err := coll.InsertOne(context.TODO(), newPerson)
-	if err != nil {
-		return err
-	}
 
 	statusCode, msg := validation.ValidateRequest(newPerson)
 	if statusCode != fiber.StatusCreated {
 		return c.Status(statusCode).JSON(fiber.Map{"error": msg})
 	}
 
+	newPerson.Id = uuid.New().String()
+
+	coll := database.GetCollection("pessoas")
+	_, err := coll.InsertOne(context.TODO(), newPerson)
+	if err != nil {
+		return err
+	}
+
 	header := fmt.Sprintf("/pessoas/%s", newPerson.Id)
 	c.Set("Location", header)
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"success": msg, "id": newPerson.Id})
+	return c.Status(statusCode).JSON(fiber.Map{"success": msg, "id": newPerson.Id})
 }
 
 func GetPersonById(c *fiber.Ctx) error {

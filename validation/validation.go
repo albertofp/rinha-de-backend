@@ -1,6 +1,7 @@
 package validation
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -52,9 +53,7 @@ func validateDate(req *models.PersonDTO) bool {
 	}
 	return false
 }
+
 func isString[T any](input T) bool {
-	var check interface{}
-	check = input
-	_, ok := check.(string)
-	return ok
+	return fmt.Sprintf("%T", input) == "string"
 }
