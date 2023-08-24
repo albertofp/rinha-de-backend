@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 
+	"github.com/bytedance/sonic"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cache"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -29,7 +30,10 @@ func main() {
 	}
 	defer database.CloseDB()
 
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		JSONEncoder: sonic.Marshal,
+		JSONDecoder: sonic.Unmarshal,
+	})
 	app.Use(logger.New())
 	app.Use(cache.New())
 	app.Get("/swagger/*", fiberSwagger.WrapHandler)
