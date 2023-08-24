@@ -86,7 +86,6 @@ func PostPerson(c *fiber.Ctx) error {
 
 func GetPersonById(c *fiber.Ctx) error {
 	id := c.Params("id")
-	fmt.Println("Search by id: ", id)
 	if id == "" {
 		return c.Status(400).JSON(fiber.Map{
 			"error": "id is required",
@@ -98,14 +97,19 @@ func GetPersonById(c *fiber.Ctx) error {
 
 	var pessoa models.PersonDTO
 	err := coll.FindOne(context.TODO(), filter).Decode(&pessoa)
+
 	if err != nil {
-		fmt.Println("searching...")
+		if err.Error() == "mongo: no documents in result" {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"error": err.Error(),
+			})
+		}
 		return c.Status(500).JSON(fiber.Map{
 			"error": err.Error(),
 		})
 	}
 
-	return c.Status(fiber.StatusFound).JSON(pessoa)
+	return c.Status(fiber.StatusOK).JSON(pessoa)
 }
 
 func GetAll(c *fiber.Ctx) error {
@@ -115,7 +119,7 @@ func GetAll(c *fiber.Ctx) error {
 	var people []models.PersonDTO
 	cursor, err := coll.Find(context.TODO(), filter)
 	if err != nil {
-		return err
+
 	}
 	if err = cursor.All(context.TODO(), &people); err != nil {
 		return err
