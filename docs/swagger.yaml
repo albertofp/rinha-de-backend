@@ -1,4 +1,11 @@
 info:
-  contact: {}
+  contact:
+    email: albertopluecker@gmail.com
+    name: Alberto F. Pluecker
+    url: https://github.com/albertofp
+  license:
+    name: MIT
+  title: Rinha de Backend Q3 2023 - Alberto Pluecker
+  version: "1.0"
 paths: {}
 swagger: "2.0"

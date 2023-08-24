@@ -1,7 +1,16 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "title": "Rinha de Backend Q3 2023 - Alberto Pluecker",
+        "contact": {
+            "name": "Alberto F. Pluecker",
+            "url": "https://github.com/albertofp",
+            "email": "albertopluecker@gmail.com"
+        },
+        "license": {
+            "name": "MIT"
+        },
+        "version": "1.0"
     },
     "paths": {}
 }

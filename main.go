@@ -34,9 +34,9 @@ func main() {
 	app.Use(requestid.New())
 	app.Get("/swagger/*", fiberSwagger.WrapHandler)
 
-	app.Get("/pessoas", handlers.GetPersonByTerm)
-	app.Get("/pessoas/:id", handlers.GetPersonById)
-	app.Post("/pessoas", handlers.PostPerson)
+	app.Get("/pessoas", handlers.Query)
+	app.Get("/pessoas/:id", handlers.SearchId)
+	app.Post("/pessoas", handlers.Create)
 
 	app.Get("/contagem-pessoas", handlers.Count)
 	app.Get("/getall", handlers.GetAll)
