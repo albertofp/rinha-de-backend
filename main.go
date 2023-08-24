@@ -10,11 +10,13 @@ import (
 	fiberSwagger "github.com/swaggo/fiber-swagger"
 
 	"github.com/albertofp/rinha-de-backend/database"
+	_ "github.com/albertofp/rinha-de-backend/docs"
 	"github.com/albertofp/rinha-de-backend/handlers"
 )
 
 //@title Rinha de Backend Q3 2023 - Alberto Pluecker
 //@version 1.0
+//@license.name MIT
 //@contact.name Alberto F. Pluecker
 //@contact.url https://github.com/albertofp
 //@contact.email albertopluecker@gmail.com

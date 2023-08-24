@@ -67,7 +67,7 @@ func PostPerson(c *fiber.Ctx) error {
 	if err := c.BodyParser(newPerson); err != nil {
 		return err
 	}
-	newPerson.Id = uuid.New()
+	newPerson.Id = uuid.New().String()
 	coll := database.GetCollection("pessoas")
 	_, err := coll.InsertOne(context.TODO(), newPerson)
 	if err != nil {
