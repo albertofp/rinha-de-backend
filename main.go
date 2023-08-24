@@ -7,10 +7,17 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/joho/godotenv"
+	fiberSwagger "github.com/swaggo/fiber-swagger"
 
 	"github.com/albertofp/rinha-de-backend/database"
 	"github.com/albertofp/rinha-de-backend/handlers"
 )
+
+//@title Rinha de Backend Q3 2023 - Alberto Pluecker
+//@version 1.0
+//@contact.name Alberto F. Pluecker
+//@contact.url https://github.com/albertofp
+//@contact.email albertopluecker@gmail.com
 
 func main() {
 	err := initApp()
@@ -23,6 +30,7 @@ func main() {
 	app := fiber.New()
 	app.Use(logger.New())
 	app.Use(requestid.New())
+	app.Get("/swagger/*", fiberSwagger.WrapHandler)
 
 	app.Get("/pessoas", handlers.GetPersonByTerm)
 	app.Get("/pessoas/:id", handlers.GetPersonById)
