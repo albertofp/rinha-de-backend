@@ -1,3 +1,4 @@
+host: localhost:8080
 info:
   contact:
     email: albertopluecker@gmail.com

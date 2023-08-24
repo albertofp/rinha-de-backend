@@ -12,6 +12,17 @@ import (
 	"github.com/albertofp/rinha-de-backend/validation"
 )
 
+//@BasePath /pessoas
+
+//@Summary Create new person document
+//@Accept json
+//@Produce json
+//@Param request body PersonCreateRequest true "Request body"
+//@Success 201 {object} PersonCreateResponse
+//@Failure 422 {object} ErrorResponse
+//@Failure 500 {object} ErrorResponse
+//@Router /pessoas [post]
+
 func Create(c *fiber.Ctx) error {
 	//TODO: check if nickname already in db -> skip
 	newPerson := new(models.PersonDTO)

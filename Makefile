@@ -1,4 +1,4 @@
-.PHONY: all
+.PHONY: default build run clean deps docs test
 APP_NAME=rinha-go
 
 default: run-with-docs
@@ -16,6 +16,7 @@ deps:
 	@go mod tidy
 
 docs:
+	@rm -rf ./docs
 	@swag init
 
 test:

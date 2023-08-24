@@ -20,13 +20,13 @@ import (
 //@contact.name Alberto F. Pluecker
 //@contact.url https://github.com/albertofp
 //@contact.email albertopluecker@gmail.com
+//@host      localhost:8080
 
 func main() {
 	err := initApp()
 	if err != nil {
 		panic(err)
 	}
-
 	defer database.CloseDB()
 
 	app := fiber.New()
