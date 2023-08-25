@@ -1,12 +1,9 @@
 package main
 
 import (
-	"os"
-
 	"github.com/bytedance/sonic"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/joho/godotenv"
 	fiberSwagger "github.com/swaggo/fiber-swagger"
 
 	"github.com/albertofp/rinha-de-backend/database"
@@ -20,7 +17,6 @@ import (
 //@contact.name Alberto F. Pluecker
 //@contact.url https://github.com/albertofp
 //@contact.email albertopluecker@gmail.com
-//@host      localhost:8080
 
 func main() {
 	err := initApp()
@@ -45,24 +41,11 @@ func main() {
 	r.Get("/getall", handlers.GetAll)
 	r.Get("/status", handlers.Status)
 
-	r.Listen(":" + os.Getenv("PORT"))
+	r.Listen(":8080")
 }
 
 func initApp() error {
-	err := loadENV()
-	if err != nil {
-		return err
-	}
-
-	err = database.InitDB()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func loadENV() error {
-	err := godotenv.Load()
+	err := database.InitDB()
 	if err != nil {
 		return err
 	}

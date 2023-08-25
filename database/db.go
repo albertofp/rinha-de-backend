@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -13,12 +12,7 @@ import (
 var db *mongo.Database
 
 func InitDB() error {
-	uri := os.Getenv("MONGO_URI")
-	if uri == "" {
-		log.Fatal(
-			"You must set your 'MONGODB_URI' environment variable. See\n\t https://www.mongodb.com/docs/drivers/go/current/usage-examples/#environment-variable",
-		)
-	}
+	uri := "mongodb://localhost:5432"
 	client, err := mongo.Connect(context.Background())
 	if err != nil {
 		panic(err)

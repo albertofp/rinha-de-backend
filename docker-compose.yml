@@ -18,21 +18,11 @@ services:
 
   api01:
     build: .
-    environment:
-      ENABLE_DEBUG: false
-      PORT: 80
-      MONGO_URI: localhost:5432
-      MONGO_DB: rinha
-      MONGO_HOST: db
-      MONGO_PASS: 123
-      MONGO_PORT: 5432
-      MONGO_USER: rinha
     hostname: rinha-api01
     depends_on:
       - db
     expose:
       - "8080"
-      - "6060"
     deploy:
       resources:
         limits:
@@ -41,21 +31,11 @@ services:
 
   api02:
     build: .
-    environment:
-      ENABLE_DEBUG: false
-      PORT: 80
-      MONGO_DB: rinha
-      MONGO_URI: localhost:5432
-      MONGO_HOST: db
-      MONGO_PASS: 123
-      MONGO_PORT: 5432
-      MONGO_USER: rinha
     hostname: rinha-api02
     depends_on:
       - db
     expose:
       - "8080"
-      - "6060"
     deploy:
       resources:
         limits:
