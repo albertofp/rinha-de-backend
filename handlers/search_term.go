@@ -32,22 +32,30 @@ func Query(c *fiber.Ctx) error {
 	coll := database.GetCollection("pessoas")
 	filter := bson.M{
 		"$or": []bson.M{
-			{"apelido": t.T},
-			{"nome": t.T},
-			{"stack": t.T},
+			{"id": bson.M{"$regex": t.T, "$options": "i"}},
+			{"apelido": bson.M{"$regex": t.T, "$options": "i"}},
+			{"nome": bson.M{"$regex": t.T, "$options": "i"}},
+			{"stack": bson.M{"$regex": t.T, "$options": "i"}},
 		},
 	}
+
 	opts := options.Find().SetLimit(50)
 
 	cursor, err := coll.Find(context.TODO(), filter, opts)
 	if err != nil {
 		return err
 	}
-	var results []models.PersonDTO
-	if err = cursor.All(context.TODO(), &results); err != nil {
-		return err
-	}
+	defer cursor.Close(context.TODO())
 
+	var results []models.PersonDTO
+	for cursor.Next(context.TODO()) {
+		var person models.PersonDTO
+		err := cursor.Decode(&person)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+		}
+		results = append(results, person)
+	}
 	fmt.Println("results: ", &results)
 	if results == nil {
 		emptyArr := make([]models.PersonDTO, 0)

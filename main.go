@@ -5,7 +5,6 @@ import (
 
 	"github.com/bytedance/sonic"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cache"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/joho/godotenv"
 	fiberSwagger "github.com/swaggo/fiber-swagger"
@@ -35,7 +34,7 @@ func main() {
 		JSONDecoder: sonic.Unmarshal,
 	})
 	r.Use(logger.New())
-	r.Use(cache.New())
+	//r.Use(cache.New())
 	r.Get("/swagger/*", fiberSwagger.WrapHandler)
 
 	r.Get("/pessoas", handlers.Query)
