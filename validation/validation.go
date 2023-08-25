@@ -12,7 +12,7 @@ import (
 func ValidateRequest(req *models.PersonDTO) (int, string) {
 
 	msgUnprocessable := "422 - Unprocessable entity"
-	msgBadRequest := "401 - Bad request"
+	msgBadRequest := "400 - Bad request"
 	msgCreated := "201 - Created"
 
 	if len(req.Apelido) > 32 || len(req.Nome) > 100 {
@@ -34,7 +34,7 @@ func ValidateRequest(req *models.PersonDTO) (int, string) {
 	if req.Stack != nil {
 		for i := range req.Stack {
 			if len(req.Stack[i]) > 32 || !isString(req.Stack[i]) {
-				return fiber.StatusUnprocessableEntity, msgUnprocessable
+				return fiber.StatusBadRequest, msgUnprocessable
 			}
 		}
 

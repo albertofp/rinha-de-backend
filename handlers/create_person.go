@@ -28,7 +28,7 @@ func Create(c *fiber.Ctx) error {
 	//TODO: check if nickname already in db -> skip
 	newPerson := new(models.PersonDTO)
 	if err := c.BodyParser(newPerson); err != nil {
-		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
 	statusCode, res := validation.ValidateRequest(newPerson)
