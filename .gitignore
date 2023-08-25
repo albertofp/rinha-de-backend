@@ -1,5 +1,13 @@
-.env
+.env*
+!.env.example
 
 bin/
 tmp/
 stress-test/user-files/results
+!stress-test/user-files/results/.gitkeep
+
+.prof
+
+
+*.html
+go.work
