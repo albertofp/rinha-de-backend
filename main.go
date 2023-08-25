@@ -30,24 +30,23 @@ func main() {
 	}
 	defer database.CloseDB()
 
-	app := fiber.New(fiber.Config{
+	r := fiber.New(fiber.Config{
 		JSONEncoder: sonic.Marshal,
 		JSONDecoder: sonic.Unmarshal,
 	})
-	app.Use(logger.New())
-	app.Use(cache.New())
-	app.Get("/swagger/*", fiberSwagger.WrapHandler)
+	r.Use(logger.New())
+	r.Use(cache.New())
+	r.Get("/swagger/*", fiberSwagger.WrapHandler)
 
-	app.Get("/pessoas", handlers.Query)
-	app.Get("/pessoas/:id", handlers.SearchId)
-	app.Post("/pessoas", handlers.Create)
+	r.Get("/pessoas", handlers.Query)
+	r.Get("/pessoas/:id", handlers.SearchId)
+	r.Post("/pessoas", handlers.Create)
 
-	app.Get("/contagem-pessoas", handlers.Count)
-	app.Get("/getall", handlers.GetAll)
-	app.Get("/status", handlers.Status)
+	r.Get("/contagem-pessoas", handlers.Count)
+	r.Get("/getall", handlers.GetAll)
+	r.Get("/status", handlers.Status)
 
-	port := os.Getenv("PORT")
-	app.Listen(":" + port)
+	r.Listen(":" + os.Getenv("PORT"))
 }
 
 func initApp() error {
