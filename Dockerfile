@@ -6,7 +6,7 @@ COPY . .
 
 RUN go get -d -v ./...
 
-RUN go build -o main.go ./bin/rinha
+RUN go build -o rinha .
 
 FROM alpine:3.18 as runtime
 
