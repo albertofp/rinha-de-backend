@@ -1,0 +1,5 @@
+.env
+
+bin/
+tmp/
+stress-test/user-files/results
