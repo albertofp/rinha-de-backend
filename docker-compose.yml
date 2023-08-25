@@ -9,7 +9,7 @@ services:
       MONGO_USER: rinha
       MONGO_DB: rinha
     ports:
-      - "5432:5432"
+      - "5432:27017"
     deploy:
       resources:
         limits:

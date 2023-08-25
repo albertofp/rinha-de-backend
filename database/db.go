@@ -12,7 +12,7 @@ import (
 var db *mongo.Database
 
 func InitDB() error {
-	uri := "mongodb://localhost:5432"
+	uri := "mongodb://localhost:27017"
 	client, err := mongo.Connect(context.Background())
 	if err != nil {
 		panic(err)
