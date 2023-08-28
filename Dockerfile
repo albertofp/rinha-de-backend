@@ -6,7 +6,7 @@ COPY . .
 
 RUN go mod download
 
-RUN go build -o rinha .
+RUN go build -o -v rinha .
 
 FROM alpine:3.18 as runtime
 

@@ -4,10 +4,6 @@ services:
   db:
     image: mongo:latest
     hostname: db
-    environment:
-      MONGO_PASSWORD: 123
-      MONGO_USER: rinha
-      MONGO_DB: rinha
     ports:
       - "5432:27017"
     deploy:
