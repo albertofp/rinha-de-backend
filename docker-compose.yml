@@ -5,7 +5,7 @@ services:
     image: mongo:latest
     hostname: db
     ports:
-      - "5432:27017"
+      - "27017:27017"
     deploy:
       resources:
         limits:
@@ -14,9 +14,7 @@ services:
 
   api01:
     build: .
-    hostname: rinha-api01
-    ports:
-      - "8080"
+    hostname: api01
     depends_on:
       - db
     expose:
@@ -29,9 +27,7 @@ services:
 
   api02:
     build: .
-    hostname: rinha-api02
-    ports:
-      - "8080"
+    hostname: api02
     depends_on:
       - db
     expose:

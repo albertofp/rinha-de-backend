@@ -6,14 +6,17 @@ import (
 	"log"
 
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
 var db *mongo.Database
 
 func InitDB() error {
-	uri := "mongodb://localhost:27017"
-	client, err := mongo.Connect(context.Background())
+	uri := "mongodb://db:27017"
+	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
+	opts := options.Client().ApplyURI(uri).SetServerAPIOptions(serverAPI)
+	client, err := mongo.Connect(context.Background(), opts)
 	if err != nil {
 		panic(err)
 	}
