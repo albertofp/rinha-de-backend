@@ -6,7 +6,7 @@ default: run-with-docs
 build: clean deps
 	@go build -o bin/$(APP_NAME) main.go
 
-run:
+run: deps
 	@air
 
 clean:
@@ -19,9 +19,7 @@ docs:
 	@rm -rf ./docs
 	@swag init
 
-test:
-	@go test ./ ...
-
 run-with-docs:
 	@swag init
+	@go mod tidy
 	@air

@@ -1,0 +1,14 @@
+.env*
+!.env.example
+.gitignore
+.git
+
+*.md
+*!README.md
+*.html
+
+tmp
+**/stress-test/user-files/results
+!stress-test/user-files/results/.gitkeep
+
+
