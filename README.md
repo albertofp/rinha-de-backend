@@ -13,7 +13,7 @@
 
 Built for the friendly competition [Rinha de Backend Q3 2023](https://github.com/zanfranceschi/rinha-de-backend-2023-q3) by [zanfranceschi](https://github.com/zanfranceschi), competition details (in portuguese) found [here](https://github.com/albertofp/rinha-de-backend/blob/main/INSTRUCOES.md)
 
-![test diagram](./assets/rinha-drawing.svg)
+![test diagram](./assets/rinha-drawing-fixed.svg)
 
 ## Usage
 
