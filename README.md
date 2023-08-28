@@ -1,5 +1,18 @@
 # Rinha de Backend Q3 2023 - Alberto Pluecker
 
+## Tech used:
+
+- Go 1.21
+- [Fiber](https://github.com/gofiber/fiber) router
+- [MongoDB](https://www.mongodb.com/) noSQL database
+- [air](https://github.com/cosmtrek/air) for live reloading
+- [Docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/) (WIP)
+- [Swagger](https://swagger.io/) for Docs generation
+- [Nginx](https://nginx.org/en/) for load balancing of the stress test
+- [Gatling](https://gatling.io/) stress test
+
+Built for the friendly competition [Rinha de Backend Q3 2023](https://github.com/zanfranceschi/rinha-de-backend-2023-q3) by [zanfranceschi](https://github.com/zanfranceschi), competition details (in portuguese) found [here](https://github.com/albertofp/rinha-de-backend/blob/main/INSTRUCOES.md)
+
 ## Usage
 
 1. Clone the repo & cd into it
