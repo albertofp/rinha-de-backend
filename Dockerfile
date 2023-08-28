@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN go get -d -v ./...
+RUN go mod download
 
 RUN go build -o rinha .
 
@@ -15,6 +15,8 @@ WORKDIR /app
 RUN mkdir /pprof
 
 COPY --from=build /app/rinha .
+
+EXPOSE 8080
 
 CMD ["./rinha"]
 

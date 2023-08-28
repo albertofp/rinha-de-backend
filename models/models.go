@@ -20,6 +20,9 @@ type PersonCreateResponse struct {
 }
 
 type ErrorResponse struct {
-	StatusCode int    `json:"status_code"`
-	Message    string `json:"message"`
+	Message string `json:"message"`
+}
+
+type CountResponse struct {
+	Count int `json:"count"`
 }

@@ -19,6 +19,8 @@ services:
   api01:
     build: .
     hostname: rinha-api01
+    ports:
+      - "8080"
     depends_on:
       - db
     expose:
@@ -32,6 +34,8 @@ services:
   api02:
     build: .
     hostname: rinha-api02
+    ports:
+      - "8080"
     depends_on:
       - db
     expose:

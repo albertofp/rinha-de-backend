@@ -10,6 +10,13 @@ import (
 	"github.com/albertofp/rinha-de-backend/models"
 )
 
+// GetAll godoc
+// @Summary Get every person in the database
+// @Description Returns an empty array if no people found.
+// @Tags getall
+// @Produce json
+// @Success 200 {array} models.PersonDTO
+// @Router /getall [get]
 func GetAll(c *fiber.Ctx) error {
 	filter := bson.M{}
 	coll := database.GetCollection("pessoas")
@@ -26,6 +33,11 @@ func GetAll(c *fiber.Ctx) error {
 
 }
 
+// Status godoc
+// @Summary Health check
+// @Tags status
+// @Success 200 {array} string
+// @Router /status [get]
 func Status(c *fiber.Ctx) error {
 	return c.SendString("GET Success")
 }

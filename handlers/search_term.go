@@ -16,6 +16,16 @@ type QueryParams struct {
 	T string //`query:"t"`
 }
 
+// Query godoc
+// @Summary Search by term
+// @Description Search for a person in database by a given query string. Search term must not be empty
+// @Tags pessoas
+// @Param t query string false "Search term"
+// @Produce json
+// @Success 200 {array} models.PersonDTO{}
+// @Failure 400 {object} models.ErrorResponse{}
+// @Failure 500 {object} models.ErrorResponse{}
+// @Router /pessoas [get]
 func Query(c *fiber.Ctx) error {
 	t := new(QueryParams)
 	if err := c.QueryParser(t); err != nil {

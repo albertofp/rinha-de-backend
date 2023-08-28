@@ -13,17 +13,17 @@ import (
 	"github.com/albertofp/rinha-de-backend/validation"
 )
 
-//@BasePath /pessoas
-
-//@Summary Create new person document
-//@Accept json
-//@Produce json
-//@Param request body PersonCreateRequest true "Request body"
-//@Success 201 {object} PersonCreateResponse
-//@Failure 422 {object} ErrorResponse
-//@Failure 500 {object} ErrorResponse
-//@Router /pessoas [post]
-
+// Create godoc
+// @Summary Create new person document
+// @Description Adds a person to the database.  Returns an error if another person with the same value for the "apelido" field exists. Apelido and Nome have to be strings of length up to 32 and 100, respectively.  Nascimento has to follow date format YYYY-MM-DD. Stack is optional, but each entry contained has to be a string of up to 32 chars in length.
+// @Tags pessoas
+// @Param request body models.PersonCreateRequest true "Request body"
+// @Accept json
+// @Produce json
+// @Success 201 {object} models.PersonCreateResponse{}
+// @Failure 422 {object} models.ErrorResponse{}
+// @Failure 500 {object} models.ErrorResponse{}
+// @Router /pessoas [post]
 func Create(c *fiber.Ctx) error {
 	//TODO: check if nickname already in db -> skip
 	newPerson := new(models.PersonDTO)

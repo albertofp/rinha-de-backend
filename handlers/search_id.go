@@ -10,6 +10,17 @@ import (
 	"github.com/albertofp/rinha-de-backend/models"
 )
 
+// SearchId godoc
+// @Summary Search person by ID
+// @Description Returns a person with the given id (UUID format)
+// @Tags pessoas
+// @Param id path string true "Person ID"
+// @Produce json
+// @Success 200 {object} models.PersonDTO{}
+// @Failure 400 {object} models.ErrorResponse{}
+// @Failure 404 {object} models.ErrorResponse{}
+// @Failure 500 {object} models.ErrorResponse{}
+// @Router /pessoas/{id} [get]
 func SearchId(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if id == "" {

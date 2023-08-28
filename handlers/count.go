@@ -9,6 +9,13 @@ import (
 	"github.com/albertofp/rinha-de-backend/database"
 )
 
+// Count godoc
+// @Summary Count total amount of people in the database
+// @Tags count
+// @Produce json
+// @Success 200 {object} models.CountResponse{}
+// @Failure 500 {object} models.ErrorResponse{}
+// @Router /contagem-pessoas [get]
 func Count(c *fiber.Ctx) error {
 	coll := database.GetCollection("pessoas")
 	filter := bson.D{}
@@ -17,7 +24,5 @@ func Count(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString("Error counting people")
 	}
 
-	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
-		"count": count,
-	})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"count": count})
 }
