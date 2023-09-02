@@ -19,6 +19,9 @@ docs:
 	@rm -rf ./docs
 	@swag init
 
+stress:
+	./run.sh
+
 run-with-docs:
 	@swag init
 	@go mod tidy
