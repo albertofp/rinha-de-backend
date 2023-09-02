@@ -5,8 +5,8 @@
 - Go 1.21
 - [Fiber](https://github.com/gofiber/fiber) router
 - [MongoDB](https://www.mongodb.com/) noSQL database
-- [air](https://github.com/cosmtrek/air) for live reloading
-- [Docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/) (WIP)
+- [air](https://github.com/cosmtrek/air) for live reloading of the dev environment
+- [Docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/)
 - [Swagger](https://swagger.io/) for Docs generation
 - [Nginx](https://nginx.org/en/) for load balancing of the stress test
 - [Gatling](https://gatling.io/) stress test
